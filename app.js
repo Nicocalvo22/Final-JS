@@ -46,7 +46,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
                 messageDivRegistro.textContent = "Usuario Registrado Exitosamente";
                 messageDivRegistro.style.color = "green";
-                console.log("Usuarios registrados:", users); // Para verificar en consola
+                console.log("Usuarios registrados:", users);
             }
         });
     } else {
