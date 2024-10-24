@@ -46,11 +46,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
                 messageDivRegistro.textContent = "Usuario Registrado Exitosamente";
                 messageDivRegistro.style.color = "green";
-                console.log("Usuarios registrados:", users);
             }
         });
-    } else {
-        console.log("submit de registro no encontrado");
     }
 
     // Funcionalidad de Inicio de Sesión
@@ -85,7 +82,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
             // Obtener el array de usuarios de localStorage
             let users = JSON.parse(localStorage.getItem("users")) || [];
-            console.log("Usuarios en localStorage:", users); // Para verificar en consola
 
             // Verificar si el usuario existe
             const user = users.find(user => user.usuario === userInput && user.password === pwInput);
@@ -103,8 +99,6 @@ document.addEventListener("DOMContentLoaded", () => {
                 messageDivLogin.style.color = "red";
             }
         });
-    } else {
-        console.log("submit de inicio de sesión no encontrado");
     }
 
     // Funcionalidad de Cerrar Sesión
@@ -116,7 +110,64 @@ document.addEventListener("DOMContentLoaded", () => {
             messageDivLogin.style.color = "green";
             logoutButton.style.display = 'none';
         });
-    } else {
-        console.log("Botón de cerrar sesión no encontrado");
     }
+});
+
+// Codigo API cartelera
+
+// Función para buscar la película
+function buscarPelicula(peliculaNombre, contenedorId) {
+    const url = `https://api.themoviedb.org/3/search/movie?api_key=dd5064131984f134c4d33ef1f121a774&language=es-ES&query=${encodeURIComponent(peliculaNombre)}`;
+
+    fetch(url)
+        .then(response => response.json())
+        .then(data => {
+            const peliculas = data.results;
+            if (peliculas.length > 0) {
+                const pelicula = peliculas[0];
+                const contenedor = document.getElementById(contenedorId);
+                if (contenedor) {
+                    const link = document.createElement("a");
+                    link.href = `comprar-entradas.html?pelicula=${encodeURIComponent(pelicula.title)}`; // Redirige con el nombre de la película
+
+                    const img = document.createElement("img");
+                    const postUrl = `https://image.tmdb.org/t/p/w500${pelicula.poster_path}`;
+
+                    img.src = postUrl;
+                    img.alt = pelicula.title;
+                    img.width = 500; // Ajusta el ancho a tu preferencia
+                    img.height = 750; // Ajusta la altura a tu preferencia
+
+                    link.appendChild(img);
+                    contenedor.appendChild(link);
+                }
+            }
+        })
+        .catch(error => alert('Error al obtener la imagen de la pelicula:', error));
+}
+
+// Llamadas a la función para agregar películas
+const peliculas = [
+    "Deadpool & Wolverine",
+    "Beetlejuice Beetlejuice",
+    "El hoyo 2",
+    "Despicable Me 4",
+    "The Substance",
+    "The Wild Robot",
+    "Terrifier 3",
+    "Inside Out 2",
+    "탈출: 프로젝트 사일런스",
+    "The Crow",
+    "It Ends with Us",
+    "The Bad Guys: Haunted Heist",
+    "Speak No Evil",
+    "Joker: Folie à Deux",
+    "Kill 'em All 2",
+    "Wolfs",
+    "Bad Boys: Ride or Die",
+    "Flow"
+];
+
+peliculas.forEach((nombre, index) => {
+    buscarPelicula(nombre, `card${index + 1}`);
 });
